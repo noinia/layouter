@@ -15,7 +15,7 @@ category:           UI
 build-type:         Simple
 extra-doc-files:
     README.md
-    changelog
+    -- changelog
     changelog.org
 -- extra-source-files:
 
@@ -49,6 +49,9 @@ common setup
       , hgeometry-svg             >= 1.0.0.0       && < 2
       , hiraffe                   >= 0.1           && < 1
       , containers                >= 0.6           && < 1
+      , barbies                   >= 2.0           && < 3
+      , barbies-th                >= 0.1.10        && < 1
+      , text                      >= 2.0           && < 3
       -- , vector                    >= 0.13          && < 1
       , lens                      >= 5.2           && < 6
       -- , deepseq                   >= 1.1           && < 2
@@ -97,7 +100,7 @@ common quickcheck-setup
         hspec                   >= 2.9          && < 3
       , QuickCheck              >= 2.10         && < 3
       , quickcheck-instances    >= 0.2          && < 1
-      , hgeometry
+      , layouter
 
 --------------------------------------------------------------------------------
 -- * Main Library
@@ -107,6 +110,8 @@ library
     hs-source-dirs:   src
     exposed-modules:
         Layouter
+        Layouter.Constraints
+        Layouter.Elements
 
     other-modules:
 --        HGeometry.Polygon.Simple.Implementation
@@ -138,3 +143,13 @@ library
 --   other-modules:
 --       Spec
 --   hs-source-dirs:   test
+
+--------------------------------------------------------------------------------
+-- * Executable
+
+executable layouter-example
+  import:         setup
+  hs-source-dirs: app
+  main-is:        Main.hs
+  build-depends:
+      layouter
