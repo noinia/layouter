@@ -1,6 +1,5 @@
 module Layouter
-  (
-
+  ( ComputeSize(..)
   ) where
 
 import           Barbies
@@ -47,27 +46,31 @@ import           Layouter.Elements
 
 
 class ComputeSize (t :: Type -> (Type -> Type) -> Type) where
-  -- | We are given some size constraints
+
+  -- | Given a size constraint, compute and label the UI tree with sizes
   computeSize :: (Num r, Ord r)
-              => Constraints r -> t Bare f -> t Covered (Sized (Top r))
+              => Constraints r
+              -- ^ the incoming size constraints
+              -> t Bare f
+              -- ^ the UI-tree for which we wish to compute the sizes
+              -> Sized (Top r) (t Covered (Sized (Top r)))
+              -- ^ we annotate each subtree with sizes, and return the total size of te
+              -- entire tree.
 
 
 -- | default text height, in pixels
 textHeight :: Num r => r
 textHeight = 10
 
-
-
-
 instance ComputeSize Label where
-  computeSize constr (Label t) = Label (Sized size t)
+  computeSize (Constraints constr) (Label t) = Sized size' (Label (Sized size' t))
     where
-      size = Size Top (ValT textHeight)
+      size' = min <$> constr <*> Size Top (ValT textHeight)
 
 instance ComputeSize content => ComputeSize (Button content) where
-  computeSize constr (Button content) = Button (sized content')
+  computeSize constr (Button content) = Sized size' (Button (Sized size' content'))
     where
-      content' = computeSize constr content
+      (Sized size' content') = computeSize constr content
 
 
 -- class IsLayoutable t where
