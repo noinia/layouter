@@ -1,5 +1,4 @@
-hgeometry-combinatorial
-=======================
+Layouter
+========
 
-The combinatorial types for the
-[HGeometry](https://hackage.haskell.org/package/hgeometry) package.
+Attempting to implement Flutter style UI-layouts.
